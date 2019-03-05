@@ -4,7 +4,7 @@ const x = require('x-ray-scraper');
 const normalizeUrl = require('normalize-url');
 const { URL } = require('url');
 
-const ACCESS_TOKEN = '34521b68-d79e-4700-b213-e6b3366a5eb9'
+const ACCESS_TOKEN = ''
 const hubspotBlogName = 'james-wordpress';
 
 app.post('/api/website', (req, res) => {
