@@ -1,6 +1,7 @@
+'use es6';
+
 import React, { Component } from 'react';
 import axios from 'axios';
-import AppBar from '@material-ui/core/AppBar';
 import '../App.css';
 import StepperComponent from '../components/Stepper';
 
@@ -9,21 +10,24 @@ class Application extends Component {
     data: [],
     url: ''
   };
+
   handleChange = evt => {
     this.setState({
       url: evt.target.value
     });
   };
+
   handleSubmit = evt => {
     evt.preventDefault();
     const { url } = this.state;
     axios.post('/api/website', { url }).then(res => {
-      const data = res.data;
+      const { data } = res;
       this.setState({
         data
       });
     });
   };
+
   render() {
     const { data } = this.state;
     return (

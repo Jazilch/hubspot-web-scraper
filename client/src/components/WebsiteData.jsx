@@ -1,6 +1,7 @@
 'use es6';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const styles = () => ({
   table: {
     maxWidth: 850,
     margin: '20px auto'
@@ -16,7 +17,7 @@ const styles = theme => ({
 });
 
 const WebsiteData = ({ data, classes }) => (
-  <main classname="website__data">
+  <main className="website__data">
     <Table className={classes.table}>
       <TableHead>
         <TableRow>
@@ -30,7 +31,7 @@ const WebsiteData = ({ data, classes }) => (
             <TableRow>
               <TableCell>{d.slug}</TableCell>
               <TableCell>
-                <img src={d.featuredImage} height="250" width="250" />
+                <img src={d.featuredImage} height="250" width="250" alt="" />
               </TableCell>
             </TableRow>
           ))}
@@ -38,5 +39,10 @@ const WebsiteData = ({ data, classes }) => (
     </Table>
   </main>
 );
+
+WebsiteData.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
+};
 
 export default withStyles(styles)(WebsiteData);
