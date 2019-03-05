@@ -6,8 +6,9 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
+import WebsiteDataContainer from '../containers/WebsiteDataContainer';
 import WebsiteForm from './WebsiteForm';
-import WebsiteData from './WebsiteData';
+import HubSpotPostsContainer from '../containers/HubSpotPostsContainer';
 
 class StepperComponent extends Component {
   state = {
@@ -15,16 +16,18 @@ class StepperComponent extends Component {
   };
 
   getStepContent = step => {
-    const { data, handleChange, handleSubmit } = this.props;
+    const { data, hubSpotPosts, handleChange, handleFetch, handlePosts } = this.props;
     switch (step) {
       case 0:
-        return <WebsiteForm handleChange={handleChange} handleSubmit={handleSubmit} />;
+        return <WebsiteForm handleChange={handleChange} />;
       case 1:
-        return <WebsiteData data={data} />;
+        return <WebsiteDataContainer data={data} handleFetch={handleFetch} />;
       case 2:
-        return 'Lets find out which posts are in HubSpot';
+        return <HubSpotPostsContainer hubSpotPosts={hubSpotPosts} handlePosts={handlePosts} />;
       case 3:
         return 'Cool, good to go! Lets upload those images';
+      case 4:
+        return 'Sweet upload all the images! Lets update';
       default:
         return '🚀🚀';
     }
@@ -61,6 +64,9 @@ class StepperComponent extends Component {
           <Step>
             <StepLabel>Step 4</StepLabel>
           </Step>
+          <Step>
+            <StepLabel>Step 5</StepLabel>
+          </Step>
         </Stepper>
         {this.getStepContent(activeStep)}
         <Button
@@ -82,7 +88,9 @@ class StepperComponent extends Component {
 StepperComponent.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleFetch: PropTypes.func.isRequired,
+  handlePosts: PropTypes.func.isRequired,
+  hubSpotPosts: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default StepperComponent;

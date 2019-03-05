@@ -8,7 +8,8 @@ import StepperComponent from '../components/Stepper';
 class Application extends Component {
   state = {
     data: [],
-    url: ''
+    url: '',
+    hubSpotPosts: []
   };
 
   handleChange = evt => {
@@ -17,8 +18,7 @@ class Application extends Component {
     });
   };
 
-  handleSubmit = evt => {
-    evt.preventDefault();
+  handleFetch = () => {
     const { url } = this.state;
     axios.post('/api/website', { url }).then(res => {
       const { data } = res;
@@ -28,8 +28,17 @@ class Application extends Component {
     });
   };
 
-  render() {
+  handlePosts = () => {
     const { data } = this.state;
+    axios.post('/api/v1/posts', { postData: data }).then(res => {
+      this.setState({
+        hubSpotPosts: res.data
+      });
+    });
+  };
+
+  render() {
+    const { data, hubSpotPosts } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -37,8 +46,10 @@ class Application extends Component {
         </header>
         <StepperComponent
           data={data}
+          hubSpotPosts={hubSpotPosts}
           handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
+          handleFetch={this.handleFetch}
+          handlePosts={this.handlePosts}
         />
       </div>
     );

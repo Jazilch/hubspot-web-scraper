@@ -4,11 +4,16 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "normalize-url": "^4.2.0",
+    "url": "^0.11.0",
     "x-ray-scraper": "^3.0.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

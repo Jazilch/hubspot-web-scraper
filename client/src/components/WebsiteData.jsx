@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = () => ({
   table: {
@@ -18,25 +19,29 @@ const styles = () => ({
 
 const WebsiteData = ({ data, classes }) => (
   <main className="website__data">
-    <Table className={classes.table}>
-      <TableHead>
-        <TableRow>
-          <TableCell>Slug</TableCell>
-          <TableCell>Featured Image</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data &&
-          data.map(d => (
-            <TableRow>
-              <TableCell>{d.slug}</TableCell>
-              <TableCell>
-                <img src={d.featuredImage} height="250" width="250" alt="" />
-              </TableCell>
-            </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+    {!data.length ? (
+      <CircularProgress color="secondary" />
+    ) : (
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Slug</TableCell>
+            <TableCell>Featured Image</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data &&
+            data.map(d => (
+              <TableRow>
+                <TableCell>{d.slug}</TableCell>
+                <TableCell>
+                  <img src={d.featuredImage} height="250" width="250" alt="" />
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    )}
   </main>
 );
 
