@@ -12,13 +12,14 @@ class WebsiteDataContainer extends Component {
   }
 
   render() {
-    const { data, loading } = this.props;
-    return <WebsiteData data={data} loading={loading} />;
+    const { data, error, loading } = this.props;
+    return <WebsiteData data={data} error={error} loading={loading} />;
   }
 }
 
 WebsiteDataContainer.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  error: PropTypes.objectOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
   handleFetch: PropTypes.func.isRequired
 };
@@ -29,6 +30,7 @@ export default props => (
       <WebsiteDataContainer
         {...props}
         data={context.data}
+        error={context.error}
         loading={context.loading}
         handleFetch={context.handleFetch}
       />

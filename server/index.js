@@ -6,6 +6,10 @@ const normalizeUrl = require('normalize-url');
 const {
   URL
 } = require('url');
+const {
+  check,
+  validationResult
+} = require('express-validator/check');
 
 const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';
@@ -17,23 +21,28 @@ app.use(bodyParser.json());
 const errorMiddleware = fn =>
   (req, res, next) => {
     Promise.resolve(fn(req, res, next))
-    .catch(err => {
-      err.httpStatus = 500,
-      next(err)
-   });
-};
+      .catch(err => {
+        err.httpStatus = 500,
+          next(err)
+      });
+  };
 
-app.post('/api/v1/website', errorMiddleware(async (req, res, next) => {
-    const url = req.body.url;
-    if (!url) {
-      res.sendStatus(400);
-    }
-    const stream = await x(`${url}`, '.post', [{
-      slug: 'a@href',
-      featuredImage: 'img@src',
-    }]).stream();
-    stream.pipe(res);
-}))
+app.post('/api/v1/website', [
+  check('url').isURL().withMessage('must enter a URL to start'),
+], async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array()
+    });
+  }
+  const url = req.body.url;
+  const stream = await x(`${url}`, '.post', [{
+    slug: 'a@href',
+    featuredImage: 'img@src',
+  }]).stream();
+  stream.pipe(res);
+})
 
 const getPostsArray = (postData) => {
   return postData.map((data) => {
@@ -68,11 +77,11 @@ const getPostsArray = (postData) => {
 app.post('/api/v1/posts', (req, res) => {
   const postData = req.body.postData;
   return axios.all(getPostsArray(postData))
-  .then(results => {
-    res.send([].concat(...results));
-  }).catch(error => {
-    console.log(error);
-  })
+    .then(results => {
+      res.send([].concat(...results));
+    }).catch(error => {
+      console.log(error);
+    })
 })
 
 
@@ -111,31 +120,31 @@ app.post('/api/v1/posts', (req, res) => {
 // })
 
 app.post('/api/v1/images', (req, res) => {
-    const postData = req.body.postData;
-    return axios.all(postData.map((data) => {
-      const slug = data.slug;
-      const id = data.id;
-      const featuredImage = data.featuredImage;
-      return axios({
-        method: 'post',
-        url: `${fileAPIURL}?access_token=${ACCESS_TOKEN}`,
-        data: {
-          folder_path: "Blog_Media",
-          "url": featuredImage
-        }
-      }).then((response) => {
-        const content = response.data;
-        return {
-          slug,
-          id,
-          featuredImage: content.url
-        }
-      })
-    })).then(results => {
-      res.send([].concat(...results));
-    }).catch(error => {
-      console.log(error);
+  const postData = req.body.postData;
+  return axios.all(postData.map((data) => {
+    const slug = data.slug;
+    const id = data.id;
+    const featuredImage = data.featuredImage;
+    return axios({
+      method: 'post',
+      url: `${fileAPIURL}?access_token=${ACCESS_TOKEN}`,
+      data: {
+        folder_path: "Blog_Media",
+        "url": featuredImage
+      }
+    }).then((response) => {
+      const content = response.data;
+      return {
+        slug,
+        id,
+        featuredImage: content.url
+      }
     })
+  })).then(results => {
+    res.send([].concat(...results));
+  }).catch(error => {
+    console.log(error);
+  })
 })
 
 

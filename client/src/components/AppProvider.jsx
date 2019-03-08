@@ -9,6 +9,7 @@ class AppProvider extends Component {
   state = {
     data: [],
     loading: false,
+    error: null,
     url: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
@@ -23,24 +24,40 @@ class AppProvider extends Component {
 
   handleFetch = () => {
     const { url } = this.state;
-    this.setState({ loading: true });
-    axios.post('/api/v1/website', { url }).then(res => {
-      this.setState({
-        data: res.data,
-        loading: false
-      });
+    this.setState({
+      loading: true,
+      error: null
     });
+    axios.post('/api/v1/website', { url }).then(
+      res =>
+        this.setState({
+          data: res.data,
+          loading: false
+        }),
+      error =>
+        this.setState({
+          loading: false,
+          error
+        })
+    );
   };
 
   handlePosts = () => {
     const { data } = this.state;
     this.setState({ loading: true });
-    axios.post('/api/v1/posts', { postData: data }).then(res => {
-      this.setState({
-        hubSpotPosts: res.data,
-        loading: false
+    axios
+      .post('/api/v1/posts', { postData: data })
+      .then(res => {
+        this.setState({
+          hubSpotPosts: res.data,
+          loading: false
+        });
+      })
+      .catch(err => {
+        this.setState({
+          error: err
+        });
       });
-    });
   };
 
   handleImages = () => {
@@ -64,13 +81,22 @@ class AppProvider extends Component {
   };
 
   render() {
-    const { data, loading, url, hubSpotPosts, hubspotPostswImages, imageStatus } = this.state;
+    const {
+      data,
+      loading,
+      error,
+      url,
+      hubSpotPosts,
+      hubspotPostswImages,
+      imageStatus
+    } = this.state;
     const { children } = this.props;
     return (
       <AppContext.Provider
         value={{
           data,
           loading,
+          error,
           url,
           hubSpotPosts,
           hubspotPostswImages,
