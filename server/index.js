@@ -7,24 +7,36 @@ const {
   URL
 } = require('url');
 
+const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';
-const ACCESS_TOKEN = '00cb1414-b0c8-4896-ba81-7328cc5a54b1'
+const ACCESS_TOKEN = ''
 const hubspotBlogName = 'james-wordpress';
 
 app.use(bodyParser.json());
 
-app.post('/api/v1/website', (req, res) => {
-  const url = req.body.url;
-  const stream = x(`${url}`, '.post', [{
-    slug: 'a@href',
-    featuredImage: 'img@src',
-  }]).stream();
-  stream.pipe(res);
-});
+const errorMiddleware = fn =>
+  (req, res, next) => {
+    Promise.resolve(fn(req, res, next))
+    .catch(err => {
+      err.httpStatus = 500,
+      next(err)
+   });
+};
 
-app.post('/api/v1/posts', (req, res) => {
-  const postData = req.body.postData;
-  return axios.all(postData.map((data) => {
+app.post('/api/v1/website', errorMiddleware(async (req, res, next) => {
+    const url = req.body.url;
+    if (!url) {
+      res.sendStatus(400);
+    }
+    const stream = await x(`${url}`, '.post', [{
+      slug: 'a@href',
+      featuredImage: 'img@src',
+    }]).stream();
+    stream.pipe(res);
+}))
+
+const getPostsArray = (postData) => {
+  return postData.map((data) => {
     let slug = data.slug;
     let featuredImage = data.featuredImage;
     slug = normalizeUrl(slug, {
@@ -32,8 +44,12 @@ app.post('/api/v1/posts', (req, res) => {
     });
     slug = new URL(slug);
     slug = slug.pathname;
-    const slugURL = `https://api.hubapi.com/blogs/v3/blog-posts?access_token=${ACCESS_TOKEN}&slug=${hubspotBlogName}${slug}`;
-    return axios.get(slugURL).then((response) => {
+    return axios.get(blogPostURL, {
+      params: {
+        access_token: ACCESS_TOKEN,
+        slug: `${hubspotBlogName}${slug}`,
+      }
+    }).then((response) => {
       const contents = response.data.objects;
       return contents.map((content) => {
         if (content.id) {
@@ -45,12 +61,54 @@ app.post('/api/v1/posts', (req, res) => {
         }
       })
     })
-  })).then(results => {
+  })
+}
+
+
+app.post('/api/v1/posts', (req, res) => {
+  const postData = req.body.postData;
+  return axios.all(getPostsArray(postData))
+  .then(results => {
     res.send([].concat(...results));
   }).catch(error => {
     console.log(error);
   })
 })
+
+
+// app.post('/api/v1/posts', (req, res) => {
+//   const postData = req.body.postData;
+//   return axios.all(postData.map((data) => {
+//     let slug = data.slug;
+//     let featuredImage = data.featuredImage;
+//     slug = normalizeUrl(slug, {
+//       removeTrailingSlash: true
+//     });
+//     slug = new URL(slug);
+//     slug = slug.pathname;
+//     return axios.get(blogPostURL, {
+//       params: {
+//         access_token: ACCESS_TOKEN,
+//         slug: `${hubspotBlogName}${slug}`,
+//       }
+//     }).then((response) => {
+//       const contents = response.data.objects;
+//       return contents.map((content) => {
+//         if (content.id) {
+//           return {
+//             slug: content.slug,
+//             id: content.id,
+//             featuredImage,
+//           }
+//         }
+//       })
+//     })
+//   })).then(results => {
+//     res.send([].concat(...results));
+//   }).catch(error => {
+//     console.log(error);
+//   })
+// })
 
 app.post('/api/v1/images', (req, res) => {
     const postData = req.body.postData;

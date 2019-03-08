@@ -7,8 +7,9 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import WebsiteForm from './WebsiteForm';
 import StepperHelpCard from './StepperHelpCard';
+import Steps from '../Constants';
+import WebsiteFormContainer from '../containers/WebsiteFormContainer';
 import WebsiteDataContainer from '../containers/WebsiteDataContainer';
 import HubSpotPostsContainer from '../containers/HubSpotPostsContainer';
 import HubSpotImagesContainer from '../containers/HubSpotImagesContainer';
@@ -30,33 +31,17 @@ class StepperComponent extends Component {
   };
 
   getStepContent = step => {
-    const {
-      data,
-      hubSpotPosts,
-      hubspotPostswImages,
-      imageStatus,
-      handleChange,
-      handleFetch,
-      handlePosts,
-      handleImages,
-      handleUpload
-    } = this.props;
     switch (step) {
       case 0:
-        return <WebsiteForm handleChange={handleChange} />;
+        return <WebsiteFormContainer />;
       case 1:
-        return <WebsiteDataContainer data={data} handleFetch={handleFetch} />;
+        return <WebsiteDataContainer />;
       case 2:
-        return <HubSpotPostsContainer hubSpotPosts={hubSpotPosts} handlePosts={handlePosts} />;
+        return <HubSpotPostsContainer />;
       case 3:
-        return (
-          <HubSpotImagesContainer
-            hubspotPostswImages={hubspotPostswImages}
-            handleImages={handleImages}
-          />
-        );
+        return <HubSpotImagesContainer />;
       case 4:
-        return <UploadImagesContainer imageStatus={imageStatus} handleUpload={handleUpload} />;
+        return <UploadImagesContainer />;
       default:
         return 'Congrats! You have successfully uploaded your images into HubSpot. Head back to your blog and see your new images';
     }
@@ -83,21 +68,11 @@ class StepperComponent extends Component {
       <React.Fragment>
         <div className={classes.root}>
           <Stepper className={classes.stepper} activeStep={activeStep}>
-            <Step>
-              <StepLabel>Step 1</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Step 2</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Step 3</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Step 4</StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>Step 5</StepLabel>
-            </Step>
+            {Steps.map(step => (
+              <Step>
+                <StepLabel>{step}</StepLabel>
+              </Step>
+            ))}
           </Stepper>
         </div>
         <StepperHelpCard activeStep={activeStep} />
@@ -121,16 +96,7 @@ class StepperComponent extends Component {
 }
 
 StepperComponent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  imageStatus: PropTypes.string.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleFetch: PropTypes.func.isRequired,
-  handlePosts: PropTypes.func.isRequired,
-  hubSpotPosts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hubspotPostswImages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleImages: PropTypes.func.isRequired,
-  handleUpload: PropTypes.func.isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(StepperComponent);

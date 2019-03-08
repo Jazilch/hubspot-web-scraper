@@ -1,27 +1,24 @@
 'use es6';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 
-class WebsiteForm extends PureComponent {
-  render() {
-    const { handleChange, handleSubmit } = this.props;
-    return (
-      <div>
-        <form onSubmit={handleSubmit}>
-          <FormLabel>Enter Website</FormLabel>
-          <Input onChange={handleChange} />
-        </form>
-      </div>
-    );
-  }
-}
+const WebsiteForm = ({ handleChange }) => (
+  <div>
+    <form>
+      <FormControl required>
+        <FormLabel>Enter Website</FormLabel>
+        <Input onChange={handleChange} />
+      </FormControl>
+    </form>
+  </div>
+);
 
 WebsiteForm.propTypes = {
-  handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired
 };
 
 export default WebsiteForm;

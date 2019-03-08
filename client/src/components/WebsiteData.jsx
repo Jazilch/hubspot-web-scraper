@@ -21,12 +21,12 @@ const styles = () => ({
   }
 });
 
-const WebsiteData = ({ data, classes }) => (
+const WebsiteData = ({ data, loading, classes }) => (
   <main className="website__data">
     <Paper className={classes.root}>
-      {!data.length ? (
-        <CircularProgress color="secondary" />
-      ) : (
+      {!data.length && loading && <CircularProgress color="secondary" />}
+      {!data.length && !loading && <p>Couldnt find any data from your website.</p>}
+      {data && (
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -34,17 +34,16 @@ const WebsiteData = ({ data, classes }) => (
               <TableCell>Featured Image</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data &&
-              data.map(d => (
-                <TableRow>
-                  <TableCell>{d.slug}</TableCell>
-                  <TableCell>
-                    <img src={d.featuredImage} height="250" width="250" alt="" />
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+          {data.map(d => (
+            <TableBody>
+              <TableRow>
+                <TableCell>{d.slug}</TableCell>
+                <TableCell>
+                  <img src={d.featuredImage} height="250" width="250" alt="" />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ))}
         </Table>
       )}
     </Paper>
@@ -53,6 +52,7 @@ const WebsiteData = ({ data, classes }) => (
 
 WebsiteData.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 

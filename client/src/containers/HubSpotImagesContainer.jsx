@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WebsiteData from '../components/WebsiteData';
+import AppContext from '../components/AppContext';
 
 class HubSpotImagesContainer extends Component {
   componentDidMount() {
@@ -21,4 +22,14 @@ HubSpotImagesContainer.propTypes = {
   hubspotPostswImages: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-export default HubSpotImagesContainer;
+export default props => (
+  <AppContext.Consumer>
+    {context => (
+      <HubSpotImagesContainer
+        {...props}
+        hubspotPostswImages={context.hubspotPostswImages}
+        handleImages={context.handleImages}
+      />
+    )}
+  </AppContext.Consumer>
+);

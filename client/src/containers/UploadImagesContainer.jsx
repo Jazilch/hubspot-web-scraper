@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Results from '../components/Results';
+import AppContext from '../components/AppContext';
 
 class UploadImagesContainer extends Component {
   componentDidMount() {
@@ -11,14 +12,26 @@ class UploadImagesContainer extends Component {
   }
 
   render() {
-    const { imageStatus } = this.props;
-    return <Results imageStatus={imageStatus} />;
+    const { imageStatus, loading } = this.props;
+    return <Results imageStatus={imageStatus} loading={loading} />;
   }
 }
 
 UploadImagesContainer.propTypes = {
   handleUpload: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
   imageStatus: PropTypes.string.isRequired
 };
 
-export default UploadImagesContainer;
+export default props => (
+  <AppContext.Consumer>
+    {context => (
+      <UploadImagesContainer
+        {...props}
+        imageStatus={context.imageStatus}
+        loading={context.loading}
+        handleUpload={context.handleUpload}
+      />
+    )}
+  </AppContext.Consumer>
+);

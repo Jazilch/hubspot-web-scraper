@@ -3,7 +3,9 @@
   "extends": ["airbnb", "prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": ["error"]
+    "prettier/prettier": ["error"],
+    "react/no-multi-comp": ["0", { "ignoreStateless": true }],
+    "import/prefer-default-export": "0"
   },
   "env": {
     "browser": true,
