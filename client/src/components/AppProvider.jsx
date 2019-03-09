@@ -44,20 +44,19 @@ class AppProvider extends Component {
 
   handlePosts = () => {
     const { data } = this.state;
-    this.setState({ loading: true });
-    axios
-      .post('/api/v1/posts', { postData: data })
-      .then(res => {
+    this.setState({ loading: true, error: null });
+    axios.post('/api/v1/posts', { postData: data }).then(
+      res =>
         this.setState({
           hubSpotPosts: res.data,
           loading: false
-        });
-      })
-      .catch(err => {
+        }),
+      error =>
         this.setState({
-          error: err
-        });
-      });
+          loading: false,
+          error
+        })
+    );
   };
 
   handleImages = () => {

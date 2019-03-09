@@ -2,23 +2,40 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
-const WebsiteForm = ({ handleChange }) => (
+const styles = {
+  button: {
+    margin: '20px 0'
+  }
+};
+
+const WebsiteForm = ({ url, classes, handleChange, handleNext }) => (
   <div>
-    <form>
-      <FormControl required>
-        <FormLabel>Enter Website</FormLabel>
-        <Input onChange={handleChange} />
-      </FormControl>
-    </form>
+    <ValidatorForm onSubmit={handleNext}>
+      <TextValidator
+        label="Website URL"
+        onChange={handleChange}
+        name="website"
+        type="website"
+        validators={['isURL', 'required']}
+        errorMessages={['this field is required']}
+        value={url}
+      />
+      <Button className={classes.button} type="submit" variant="contained" color="primary">
+        Get Website Data
+      </Button>
+    </ValidatorForm>
   </div>
 );
 
 WebsiteForm.propTypes = {
-  handleChange: PropTypes.func.isRequired
+  url: PropTypes.string.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleNext: PropTypes.func.isRequired
 };
 
-export default WebsiteForm;
+export default withStyles(styles)(WebsiteForm);

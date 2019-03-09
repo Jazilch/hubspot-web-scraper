@@ -26,7 +26,7 @@ const WebsiteData = ({ data, loading, classes }) => (
     <Paper className={classes.root}>
       {!data.length && loading && <CircularProgress color="secondary" />}
       {!data.length && !loading && <p>Couldnt find any data from your website.</p>}
-      {data.length && (
+      {data && data.length && (
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
