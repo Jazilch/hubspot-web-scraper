@@ -13,11 +13,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = () => ({
   root: {
-    width: '60%',
     minHeight: '500px',
     maxWidth: '700px',
     margin: '20px auto',
     overflowX: 'auto'
+  },
+  head: {
+    backgroundImage: 'linear-gradient(to right top, #3f51b5, #5262bf, #6473c9, #7684d3, #8895dc);'
+  },
+  cell: {
+    color: '#fff'
   }
 });
 
@@ -28,10 +33,10 @@ const WebsiteData = ({ data, loading, classes }) => (
       {!data.length && !loading && <p>Couldnt find any data from your website.</p>}
       {data && data.length && (
         <Table className={classes.table}>
-          <TableHead>
+          <TableHead className={classes.head}>
             <TableRow>
-              <TableCell>Slug</TableCell>
-              <TableCell>Featured Image</TableCell>
+              <TableCell className={classes.cell}>Slug</TableCell>
+              <TableCell className={classes.cell}>Featured Image</TableCell>
             </TableRow>
           </TableHead>
           {data.map(d => (

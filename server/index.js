@@ -10,6 +10,7 @@ const {
   check,
   validationResult
 } = require('express-validator/check');
+const { cleanSlug } = require('./utils');
 
 const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';
@@ -27,6 +28,11 @@ const errorMiddleware = fn =>
       });
   };
 
+/* ========================= 
+Makes a request to the provided URL and scrapes
+the slug and featured images from the website. 
+This data is returned in an array objects
+============================ */
 app.post('/api/v1/website', [
   check('url').isURL().withMessage('must enter a URL to start'),
 ], async (req, res, next) => {
@@ -44,84 +50,56 @@ app.post('/api/v1/website', [
   stream.pipe(res);
 })
 
+/* ========================= 
+Function takes in an array of objects
+and returns the return content id from the slug
+============================ */
 const getPostsArray = (postData) => {
   return postData.map((data) => {
     let slug = data.slug;
     let featuredImage = data.featuredImage;
-    slug = normalizeUrl(slug, {
-      removeTrailingSlash: true
-    });
-    slug = new URL(slug);
-    slug = slug.pathname;
-    return axios.get(blogPostURL, {
-      params: {
-        access_token: ACCESS_TOKEN,
-        slug: `${hubspotBlogName}${slug}`,
-      }
-    }).then((response) => {
-      const contents = response.data.objects;
-      return contents.map((content) => {
-        if (content.id) {
-          return {
-            slug: content.slug,
-            id: content.id,
-            featuredImage,
-          }
+    if (slug && featuredImage) {
+      slug = cleanSlug(slug);
+      return axios.get(blogPostURL, {
+        params: {
+          access_token: ACCESS_TOKEN,
+          slug: `${hubspotBlogName}${slug}`,
         }
+      }).then((response) => {
+        const contents = response.data.objects;
+        return contents.map(content => ({
+          slug: content.slug,
+          id: content.id,
+          featuredImage,
+        }))
       })
-    })
+    }
+    return 'no data for post';
   })
 }
 
-
-app.post('/api/v1/posts', (req, res) => {
-  const postData = req.body.postData;
-  return axios.all(getPostsArray(postData))
-    .then(results => {
-      res.send([].concat(...results));
-    }).catch(error => {
-      console.log(error);
-    })
+/* ========================= 
+Using the above function, make a request
+for each item in the array. This also makes
+sure to flatten any 2D arrays that are returned
+============================ */
+app.post('/api/v1/posts', async (req, res) => {
+  try {
+    const postData = req.body.postData;
+    const results = await axios.all(getPostsArray(postData))
+    res.send([].concat(...results))
+  } catch (error) {
+    console.log(error);
+  }
 })
 
-
-// app.post('/api/v1/posts', (req, res) => {
-//   const postData = req.body.postData;
-//   return axios.all(postData.map((data) => {
-//     let slug = data.slug;
-//     let featuredImage = data.featuredImage;
-//     slug = normalizeUrl(slug, {
-//       removeTrailingSlash: true
-//     });
-//     slug = new URL(slug);
-//     slug = slug.pathname;
-//     return axios.get(blogPostURL, {
-//       params: {
-//         access_token: ACCESS_TOKEN,
-//         slug: `${hubspotBlogName}${slug}`,
-//       }
-//     }).then((response) => {
-//       const contents = response.data.objects;
-//       return contents.map((content) => {
-//         if (content.id) {
-//           return {
-//             slug: content.slug,
-//             id: content.id,
-//             featuredImage,
-//           }
-//         }
-//       })
-//     })
-//   })).then(results => {
-//     res.send([].concat(...results));
-//   }).catch(error => {
-//     console.log(error);
-//   })
-// })
-
-app.post('/api/v1/images', (req, res) => {
-  const postData = req.body.postData;
-  return axios.all(postData.map((data) => {
+/* ========================= 
+Function takes in an array of objects
+and returns uploaded file path to HubSpot File Manager.
+Images are uploaded to folder Blog_Media
+============================ */
+const getPostImagesArray = (postData) => {
+  return postData.map((data) => {
     const slug = data.slug;
     const id = data.id;
     const featuredImage = data.featuredImage;
@@ -132,19 +110,27 @@ app.post('/api/v1/images', (req, res) => {
         folder_path: "Blog_Media",
         "url": featuredImage
       }
-    }).then((response) => {
-      const content = response.data;
-      return {
-        slug,
-        id,
-        featuredImage: content.url
-      }
-    })
-  })).then(results => {
-    res.send([].concat(...results));
-  }).catch(error => {
-    console.log(error);
+    }).then(response => ({
+      slug,
+      id,
+      featuredImage: response.data.url,
+    }))
   })
+}
+
+/* ========================= 
+Using the above function, make a request
+for each item in the array. This also makes
+sure to flatten any 2D arrays that are returned
+============================ */
+app.post('/api/v1/images', async (req, res) => {
+  try {
+    const postData = req.body.postData;
+    const results = await axios.all(getPostImagesArray(postData))
+    res.send([].concat(...results))
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 
