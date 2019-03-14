@@ -10,7 +10,9 @@ const {
   check,
   validationResult
 } = require('express-validator/check');
-const { cleanSlug } = require('./utils');
+const {
+  cleanSlug
+} = require('./utils');
 
 const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';

@@ -12,13 +12,14 @@ class UploadImagesContainer extends Component {
   }
 
   render() {
-    const { imageStatus, loading } = this.props;
-    return <Results imageStatus={imageStatus} loading={loading} />;
+    const { imageStatus, error, loading } = this.props;
+    return <Results imageStatus={imageStatus} error={error} loading={loading} />;
   }
 }
 
 UploadImagesContainer.propTypes = {
   handleUpload: PropTypes.func.isRequired,
+  error: PropTypes.objectOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
   imageStatus: PropTypes.string.isRequired
 };
@@ -29,6 +30,7 @@ export default props => (
       <UploadImagesContainer
         {...props}
         imageStatus={context.imageStatus}
+        error={context.error}
         loading={context.loading}
         handleUpload={context.handleUpload}
       />

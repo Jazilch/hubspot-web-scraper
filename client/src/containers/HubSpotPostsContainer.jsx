@@ -12,14 +12,15 @@ class HubSpotPostsContainer extends Component {
   }
 
   render() {
-    const { hubSpotPosts, loading } = this.props;
-    return <WebsiteData data={hubSpotPosts} loading={loading} />;
+    const { hubSpotPosts, error, loading } = this.props;
+    return <WebsiteData data={hubSpotPosts} error={error} loading={loading} />;
   }
 }
 
 HubSpotPostsContainer.propTypes = {
   handlePosts: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  error: PropTypes.objectOf(PropTypes.string).isRequired,
   hubSpotPosts: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
@@ -29,6 +30,7 @@ export default props => (
       <HubSpotPostsContainer
         {...props}
         hubSpotPosts={context.hubSpotPosts}
+        error={context.error}
         loading={context.loading}
         handlePosts={context.handlePosts}
       />

@@ -15,8 +15,12 @@ const styles = () => ({
   root: {
     minHeight: '500px',
     maxWidth: '700px',
+    width: '100%',
     margin: '20px auto',
-    overflowX: 'auto'
+    overflowX: 'auto',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItem: 'center'
   },
   head: {
     backgroundImage: 'linear-gradient(to right top, #3f51b5, #5262bf, #6473c9, #7684d3, #8895dc);'
@@ -31,7 +35,7 @@ const WebsiteData = ({ data, loading, classes }) => (
     <Paper className={classes.root}>
       {!data.length && loading && <CircularProgress color="secondary" />}
       {!data.length && !loading && <p>Couldnt find any data from your website.</p>}
-      {data && data.length && (
+      {data && !!data.length && (
         <Table className={classes.table}>
           <TableHead className={classes.head}>
             <TableRow>

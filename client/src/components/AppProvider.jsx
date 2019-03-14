@@ -61,22 +61,35 @@ class AppProvider extends Component {
 
   handleImages = () => {
     const { hubSpotPosts } = this.state;
-    this.setState({ loading: true });
-    axios.post('/api/v1/images', { postData: hubSpotPosts }).then(res => {
-      this.setState({
-        hubspotPostswImages: res.data,
-        loading: false
-      });
-    });
+    this.setState({ loading: true, error: null });
+    axios.post('/api/v1/images', { postData: hubSpotPosts }).then(
+      res =>
+        this.setState({
+          hubspotPostswImages: res.data,
+          loading: false
+        }),
+      error =>
+        this.setState({
+          loading: false,
+          error
+        })
+    );
   };
 
   handleUpload = () => {
     const { hubspotPostswImages } = this.state;
-    axios.post('/api/v1/updateData', { postData: hubspotPostswImages }).then(res => {
-      this.setState({
-        imageStatus: res.data
-      });
-    });
+    this.setState({ loading: true, error: null });
+    axios.post('/api/v1/updateData', { postData: hubspotPostswImages }).then(
+      res =>
+        this.setState({
+          imageStatus: res.data
+        }),
+      error =>
+        this.setState({
+          loading: false,
+          error
+        })
+    );
   };
 
   render() {

@@ -12,13 +12,15 @@ class HubSpotImagesContainer extends Component {
   }
 
   render() {
-    const { hubspotPostswImages } = this.props;
-    return <WebsiteData data={hubspotPostswImages} />;
+    const { hubspotPostswImages, error, loading } = this.props;
+    return <WebsiteData data={hubspotPostswImages} error={error} loading={loading} />;
   }
 }
 
 HubSpotImagesContainer.propTypes = {
   handleImages: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.objectOf(PropTypes.string).isRequired,
   hubspotPostswImages: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
@@ -28,6 +30,8 @@ export default props => (
       <HubSpotImagesContainer
         {...props}
         hubspotPostswImages={context.hubspotPostswImages}
+        error={context.error}
+        loading={context.loading}
         handleImages={context.handleImages}
       />
     )}
