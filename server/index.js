@@ -30,6 +30,9 @@ const errorMiddleware = fn =>
       });
   };
 
+require('./routes/authRoutes')(app);
+
+
 /* ========================= 
 Makes a request to the provided URL and scrapes
 the slug and featured images from the website. 
