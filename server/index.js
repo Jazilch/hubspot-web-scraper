@@ -1,8 +1,10 @@
+require('dotenv').config()
 const app = require('express')();
 const axios = require('axios');
 const x = require('x-ray-scraper');
 const bodyParser = require('body-parser')
 const normalizeUrl = require('normalize-url');
+const session = require('express-session');
 const {
   URL
 } = require('url');
@@ -14,12 +16,15 @@ const {
   cleanSlug
 } = require('./utils');
 
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
 const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';
-const ACCESS_TOKEN = ''
+let ACCESS_TOKEN = {};
 const hubspotBlogName = 'james-wordpress';
 
 app.use(bodyParser.json());
+app.use(session({ secret: CLIENT_SECRET, resave: false, saveUninitialized: true }));
 
 const errorMiddleware = fn =>
   (req, res, next) => {
@@ -31,6 +36,17 @@ const errorMiddleware = fn =>
   };
 
 require('./routes/authRoutes')(app);
+const { getAccessToken } = require('./routes/authRoutes');
+
+app.get('/app', async (req, res) => {
+  try {
+    const access_token = await getAccessToken(req.sessionID);
+    res.redirect('http://localhost:3000/home');
+    ACCESS_TOKEN = access_token;
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 
 /* ========================= 
@@ -65,9 +81,13 @@ const getPostsArray = (postData) => {
     let featuredImage = data.featuredImage;
     if (slug && featuredImage) {
       slug = cleanSlug(slug);
+      const headers = {
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        'Content-Type': 'application/json'
+      };
       return axios.get(blogPostURL, {
+        headers: headers,
         params: {
-          access_token: ACCESS_TOKEN,
           slug: `${hubspotBlogName}${slug}`,
         }
       }).then((response) => {
@@ -94,7 +114,11 @@ app.post('/api/v1/posts', async (req, res) => {
     const results = await axios.all(getPostsArray(postData))
     res.send([].concat(...results))
   } catch (error) {
-    console.log(error);
+    if (error.response.status === 401) {
+      throw new Error('You are not authorized for this portal! Check your access token!');
+    } else {
+      throw new Error('Cannot upload image to the file manager, try checking your URL');
+    }
   }
 })
 
@@ -108,9 +132,14 @@ const getPostImagesArray = (postData) => {
     const slug = data.slug;
     const id = data.id;
     const featuredImage = data.featuredImage;
+    const headers = {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json'
+    };
     return axios({
       method: 'post',
-      url: `${fileAPIURL}?access_token=${ACCESS_TOKEN}`,
+      headers: headers,
+      url: `${fileAPIURL}`,
       data: {
         folder_path: "Blog_Media",
         "url": featuredImage
@@ -144,9 +173,14 @@ app.post('/api/v1/updateData', (req, res) => {
   return axios.all(postData.map(data => {
     let id = data.id;
     let featuredImage = data.featuredImage;
-    const putUrl = `https://api.hubapi.com/content/api/v2/blog-posts/${id}?access_token=${ACCESS_TOKEN}`;
+    const headers = {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json'
+    };
+    const putUrl = `https://api.hubapi.com/content/api/v2/blog-posts/${id}`;
     return axios({
       method: 'put',
+      headers: headers,
       url: putUrl,
       data: {
         use_featured_image: true,

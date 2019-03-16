@@ -1,8 +1,7 @@
 require('dotenv').config()
-// const app = require('express')();
+const app = require('express')();
 const NodeCache = require('node-cache');
 const request = require('request-promise-native');
-const session = require('express-session');
 const fs = require('fs');
 
 const PORT = 8080;
@@ -23,7 +22,6 @@ const authUrl =
 
 module.exports = app => {
 
-  app.use(session({ secret: CLIENT_SECRET, resave: false, saveUninitialized: true }));
   app.get('/auth/hubspot', (req, res) => {
     console.log('Initiating OAuth 2.0 flow with HubSpot');
     console.log("Step 1: Redirecting user to HubSpot's OAuth 2.0 server");
@@ -45,12 +43,12 @@ module.exports = app => {
       return res.redirect(`/error?msg=${token.message}`);
     }
 
-    // Once the tokens have been retrieved, use them to make a query
-    // to the HubSpot API
     res.redirect(`http://localhost:3000/app`);
   });
 
-  //==========================================//
+}
+
+ //==========================================//
   //   Exchanging Proof for an Access Token   //
   //==========================================//
 
@@ -83,22 +81,15 @@ module.exports = app => {
     return await exchangeForTokens(userId, refreshTokenProof);
   };
 
-  const getAccessToken = async (userId) => {
-    // If the access token has expired, retrieve
-    // a new one using the refresh token
-    if (!accessTokenCache.get(userId)) {
-      console.log('Refreshing expired access token');
-      await refreshAccessToken(userId);
-    }
-    return accessTokenCache.get(userId);
-  };
+const getAccessToken = async (userId) => {
+  // If the access token has expired, retrieve
+  // a new one using the refresh token
+  if (!accessTokenCache.get(userId)) {
+    console.log('Refreshing expired access token');
+    await refreshAccessToken(userId);
+  }
+  return accessTokenCache.get(userId);
+};
 
-  app.get('/app', async (req, res) => {
-    try {
-      const access_token = await getAccessToken(req.sessionID);
-      res.redirect('http://localhost:3000/home');
-    } catch (error) {
-      console.log(error)
-    }
-  })
-}
+
+module.exports.getAccessToken = getAccessToken;

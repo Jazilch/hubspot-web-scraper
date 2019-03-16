@@ -96,10 +96,6 @@ const getAccessToken = async (userId) => {
 app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
-    fs.appendFile('.env', {'ACCESS_TOKEN': access_token }, function(err) {
-      if (err) throw err;
-      console.log('Set access token');
-    })
     res.redirect('http://localhost:3000/home');
 
   console.log(access_token, 'im the access token');  
