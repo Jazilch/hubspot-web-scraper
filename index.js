@@ -3,11 +3,7 @@ const app = require('express')();
 const axios = require('axios');
 const x = require('x-ray-scraper');
 const bodyParser = require('body-parser')
-const normalizeUrl = require('normalize-url');
 const session = require('express-session');
-const {
-  URL
-} = require('url');
 const {
   check,
   validationResult
