@@ -13,7 +13,8 @@ class AppProvider extends Component {
     url: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
-    imageStatus: ''
+    imageStatus: '',
+    confettiActive: false
   };
 
   handleChange = evt => {
@@ -92,6 +93,13 @@ class AppProvider extends Component {
     );
   };
 
+  handleConfetti = () => {
+    const { confettiActive } = this.state;
+    this.setState({
+      confettiActive: !confettiActive
+    });
+  };
+
   render() {
     const {
       data,
@@ -100,7 +108,8 @@ class AppProvider extends Component {
       url,
       hubSpotPosts,
       hubspotPostswImages,
-      imageStatus
+      imageStatus,
+      confettiActive
     } = this.state;
     const { children } = this.props;
     return (
@@ -113,11 +122,13 @@ class AppProvider extends Component {
           hubSpotPosts,
           hubspotPostswImages,
           imageStatus,
+          confettiActive,
           handleChange: this.handleChange,
           handleFetch: this.handleFetch,
           handlePosts: this.handlePosts,
           handleImages: this.handleImages,
-          handleUpload: this.handleUpload
+          handleUpload: this.handleUpload,
+          handleConfetti: this.handleConfetti
         }}
       >
         {children}

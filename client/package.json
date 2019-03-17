@@ -48,6 +48,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.3",
+    "react-dom-confetti": "^0.1.0",
     "react-material-ui-form-validator": "^2.0.7",
     "react-router-dom": "^4.3.1",
     "resolve": "1.10.0",
