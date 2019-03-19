@@ -41,6 +41,7 @@ const { getAccessToken } = require('./routes/authRoutes');
 app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
+    console.log(access_token, 'access in /app');
     if (process.env.NODE_ENV === 'production') {
       res.redirect('/home');
     }
@@ -84,10 +85,12 @@ const getPostsArray = (postData) => {
     let featuredImage = data.featuredImage;
     if (slug && featuredImage) {
       slug = cleanSlug(slug);
+      console.log(ACCESS_TOKEN, 'access before headers');
       const headers = {
         Authorization: `Bearer ${ACCESS_TOKEN}`,
         'Content-Type': 'application/json'
       };
+      console.log(headers, 'request headers')
       return axios.get(blogPostURL, {
         headers: headers,
         params: {
