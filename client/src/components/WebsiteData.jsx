@@ -43,16 +43,16 @@ const WebsiteData = ({ data, loading, classes }) => (
               <TableCell className={classes.cell}>Featured Image</TableCell>
             </TableRow>
           </TableHead>
-          {data.map(d => (
-            <TableBody>
-              <TableRow>
+          <TableBody>
+            {data.map(d => (
+              <TableRow key={d.id}>
                 <TableCell>{d.slug}</TableCell>
                 <TableCell>
                   <img src={d.featuredImage} height="250" width="250" alt="" />
                 </TableCell>
               </TableRow>
-            </TableBody>
-          ))}
+            ))}
+          </TableBody>
         </Table>
       )}
     </Paper>

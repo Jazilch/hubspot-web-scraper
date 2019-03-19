@@ -69,7 +69,7 @@ class StepperComponent extends Component {
         <div className={classes.root}>
           <Stepper className={classes.stepper} activeStep={activeStep}>
             {Steps.map(step => (
-              <Step>
+              <Step key={step.id}>
                 <StepLabel>{step}</StepLabel>
               </Step>
             ))}

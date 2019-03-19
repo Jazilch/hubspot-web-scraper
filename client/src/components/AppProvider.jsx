@@ -138,7 +138,7 @@ class AppProvider extends Component {
 }
 
 AppProvider.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.object).isRequired
+  children: PropTypes.node.isRequired
 };
 
 export default AppProvider;

@@ -41,7 +41,10 @@ const { getAccessToken } = require('./routes/authRoutes');
 app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
-    res.redirect('/home');
+    if (process.env.NODE_ENV === 'production') {
+      res.redirect('/home');
+    }
+    res.redirect('http://localhost:3000/home');
     ACCESS_TOKEN = access_token;
   } catch (error) {
     console.log(error)
