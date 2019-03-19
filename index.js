@@ -41,7 +41,6 @@ const { getAccessToken } = require('./routes/authRoutes');
 app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
-    console.log(access_token, 'access in /app');
     if (process.env.NODE_ENV === 'production') {
       res.redirect('/home');
     }
@@ -80,17 +79,15 @@ Function takes in an array of objects
 and returns the return content id from the slug
 ============================ */
 const getPostsArray = (postData) => {
+  const headers = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json'
+  };
   return postData.map((data) => {
     let slug = data.slug;
     let featuredImage = data.featuredImage;
     if (slug && featuredImage) {
       slug = cleanSlug(slug);
-      console.log(ACCESS_TOKEN, 'access before headers');
-      const headers = {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      };
-      console.log(headers, 'request headers')
       return axios.get(blogPostURL, {
         headers: headers,
         params: {
@@ -134,14 +131,14 @@ and returns uploaded file path to HubSpot File Manager.
 Images are uploaded to folder Blog_Media
 ============================ */
 const getPostImagesArray = (postData) => {
+  const headers = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json'
+  };
   return postData.map((data) => {
     const slug = data.slug;
     const id = data.id;
     const featuredImage = data.featuredImage;
-    const headers = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json'
-    };
     return axios({
       method: 'post',
       headers: headers,
@@ -176,13 +173,13 @@ app.post('/api/v1/images', async (req, res) => {
 
 app.post('/api/v1/updateData', (req, res) => {
   const postData = req.body.postData;
+  const headers = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json'
+  };
   return axios.all(postData.map(data => {
     let id = data.id;
     let featuredImage = data.featuredImage;
-    const headers = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json'
-    };
     const putUrl = `https://api.hubapi.com/content/api/v2/blog-posts/${id}`;
     return axios({
       method: 'put',
