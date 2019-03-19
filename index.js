@@ -42,6 +42,7 @@ app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
     if (process.env.NODE_ENV === 'production') {
+      ACCESS_TOKEN = access_token;
       res.redirect('/home');
     }
     res.redirect('http://localhost:3000/home');
