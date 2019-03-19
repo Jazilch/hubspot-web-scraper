@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require ('express');
 const axios = require('axios');
+const path = require('path');
 const PORT = process.env.PORT || 8080;
 const x = require('x-ray-scraper');
 const bodyParser = require('body-parser')
@@ -40,7 +41,7 @@ const { getAccessToken } = require('./routes/authRoutes');
 app.get('/app', async (req, res) => {
   try {
     const access_token = await getAccessToken(req.sessionID);
-    res.redirect('http://localhost:3000/home');
+    res.redirect('/home');
     ACCESS_TOKEN = access_token;
   } catch (error) {
     console.log(error)
@@ -201,7 +202,6 @@ app.use(express.static('client/build'));
 
 //Express serve up index.html
 // If it doesn't recognize the route
-const path = require('path');
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });

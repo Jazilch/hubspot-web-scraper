@@ -43,7 +43,7 @@ module.exports = app => {
       return res.redirect(`/error?msg=${token.message}`);
     }
 
-    res.redirect(`http://localhost:3000/app`);
+    res.redirect(`/app`);
   });
 
 }
