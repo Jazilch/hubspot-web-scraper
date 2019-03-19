@@ -1,12 +1,13 @@
 require('dotenv').config()
 const app = require('express')();
+const path = require('path');
 const NodeCache = require('node-cache');
 const request = require('request-promise-native');
 const fs = require('fs');
 
 const PORT = 8080;
-const REDIRECT_URI = `/auth/hubspot/callback`;
 
+const REDIRECT_URI = process.env.REDIRECT_URI;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SCOPES = (process.env.SCOPE.split(/ |, ?|%20/) || ['contacts']).join(' ');
