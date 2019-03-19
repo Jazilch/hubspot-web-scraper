@@ -1,5 +1,5 @@
 require('dotenv').config()
-const app = require('express')();
+const express = require ('express');
 const axios = require('axios');
 const x = require('x-ray-scraper');
 const bodyParser = require('body-parser')
@@ -11,6 +11,8 @@ const {
 const {
   cleanSlug
 } = require('./utils');
+
+const app = express();
 
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
