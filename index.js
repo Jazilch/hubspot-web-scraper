@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require ('express');
 const axios = require('axios');
+const PORT = process.env.PORT || 8080;
 const x = require('x-ray-scraper');
 const bodyParser = require('body-parser')
 const session = require('express-session');
@@ -205,6 +206,6 @@ app.get('*', (req, res) => {
 	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
-app.listen('8080', () => {
-  console.log('server running on port 8080');
+app.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`);
 });
