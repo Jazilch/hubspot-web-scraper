@@ -203,7 +203,7 @@ app.use(express.static('client/build'));
 //Express serve up index.html
 // If it doesn't recognize the route
 app.get('*', (req, res) => {
-	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+	res.sendFile(path.resolve(__dirname, '/client/build/index.html'));
 });
 
 app.listen(PORT, () => {
