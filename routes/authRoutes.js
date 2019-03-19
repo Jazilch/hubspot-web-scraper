@@ -5,7 +5,7 @@ const request = require('request-promise-native');
 const fs = require('fs');
 
 const PORT = 8080;
-const REDIRECT_URI = `http://localhost:${PORT}/auth/hubspot/callback`;
+const REDIRECT_URI = `/auth/hubspot/callback`;
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
