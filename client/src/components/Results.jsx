@@ -8,6 +8,11 @@ import CardContent from '@material-ui/core/CardContent';
 import ConfettiComponent from './ConfettiComponent';
 
 const styles = {
+  root: {
+    width: '100%',
+    maxWidth: '700px',
+    margin: '0 auto'
+  },
   card: {
     maxWidth: '700px',
     margin: '20px auto',
@@ -21,12 +26,12 @@ const styles = {
 };
 
 const Results = ({ imageStatus, confettiActive, classes }) => (
-  <React.Fragment>
+  <div className={classes.root}>
     <ConfettiComponent confettiActive={confettiActive} />
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>{imageStatus}</CardContent>
     </Card>
-  </React.Fragment>
+  </div>
 );
 
 Results.propTypes = {

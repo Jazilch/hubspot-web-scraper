@@ -3,6 +3,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Confetti from 'react-dom-confetti';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+  confetti: {
+    width: '20px',
+    margin: '0 auto'
+  }
+};
 
 const config = {
   angle: 90,
@@ -17,12 +25,13 @@ const config = {
   colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a']
 };
 
-const ConfettiComponent = ({ confettiActive }) => (
-  <Confetti active={confettiActive} config={config} />
+const ConfettiComponent = ({ confettiActive, classes }) => (
+  <Confetti className={classes.confetti} active={confettiActive} config={config} />
 );
 
 ConfettiComponent.propTypes = {
-  confettiActive: PropTypes.bool.isRequired
+  confettiActive: PropTypes.bool.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
-export default ConfettiComponent;
+export default withStyles(styles)(ConfettiComponent);
