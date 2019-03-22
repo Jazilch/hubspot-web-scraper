@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ErrorComponent from './ErrorComponent';
 
 const styles = () => ({
   root: {
@@ -30,11 +31,11 @@ const styles = () => ({
   }
 });
 
-const WebsiteData = ({ data, loading, classes }) => (
+const WebsiteData = ({ data, loading, error, classes }) => (
   <main className="website__data">
     <Paper className={classes.root}>
       {!data.length && loading && <CircularProgress color="secondary" />}
-      {!data.length && !loading && <p>Couldnt find any data from your website.</p>}
+      {!data.length && !loading && <ErrorComponent error={error} />}
       {data && !!data.length && (
         <Table className={classes.table}>
           <TableHead className={classes.head}>
@@ -62,6 +63,7 @@ const WebsiteData = ({ data, loading, classes }) => (
 WebsiteData.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   loading: PropTypes.bool.isRequired,
+  error: PropTypes.objectOf(PropTypes.object || PropTypes.string),
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 

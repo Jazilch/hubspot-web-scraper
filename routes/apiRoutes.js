@@ -106,12 +106,13 @@ module.exports = app => {
       try {
         const postData = req.body.postData;
         const results = await axios.all(getPostsArray(postData))
+        if ([].concat(...results).length === 0) {
+          res.sendStatus(400);
+        }
         res.send([].concat(...results))
       } catch (error) {
         if (error.response.status === 401) {
-          throw new Error('You are not authorized for this portal! Check your access token!');
-        } else {
-          throw new Error('Cannot upload image to the file manager, try checking your URL');
+          res.sendStatus(401);
         }
       }
     })
