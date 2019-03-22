@@ -1,7 +1,6 @@
 'use strict';
 
 const axios = require('axios');
-const path = require('path');
 const x = require('x-ray-scraper');
 const {
   check,
