@@ -11,24 +11,38 @@ class AppProvider extends Component {
     loading: false,
     error: null,
     url: '',
+    selector: '',
+    pagination: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
     uploadDone: false
   };
 
-  handleChange = evt => {
+  handleURLChange = evt => {
     this.setState({
       url: evt.target.value
     });
   };
 
+  handleSelectorChange = evt => {
+    this.setState({
+      selector: evt.target.value
+    });
+  };
+
+  handlePaginationChange = evt => {
+    this.setState({
+      pagination: evt.target.value
+    });
+  };
+
   handleFetch = () => {
-    const { url } = this.state;
+    const { url, selector, pagination } = this.state;
     this.setState({
       loading: true,
       error: null
     });
-    axios.post('/api/v1/website', { url }).then(
+    axios.post('/api/v1/website', { url, selector, pagination }).then(
       res =>
         this.setState({
           data: res.data,
@@ -98,6 +112,8 @@ class AppProvider extends Component {
       loading,
       error,
       url,
+      selector,
+      pagination,
       hubSpotPosts,
       hubspotPostswImages,
       uploadDone,
@@ -111,11 +127,15 @@ class AppProvider extends Component {
           loading,
           error,
           url,
+          selector,
+          pagination,
           hubSpotPosts,
           hubspotPostswImages,
           uploadDone,
           confettiActive,
-          handleChange: this.handleChange,
+          handleURLChange: this.handleURLChange,
+          handleSelectorChange: this.handleSelectorChange,
+          handlePaginationChange: this.handlePaginationChange,
           handleFetch: this.handleFetch,
           handlePosts: this.handlePosts,
           handleImages: this.handleImages,

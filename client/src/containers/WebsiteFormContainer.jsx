@@ -15,6 +15,12 @@ class WebsiteFormContainer extends Component {
       }
       return false;
     });
+    ValidatorForm.addValidationRule('isEmpty', value => {
+      if (!validator.isEmpty(value)) {
+        return true;
+      }
+      return false;
+    });
   }
 
   render() {
@@ -24,7 +30,11 @@ class WebsiteFormContainer extends Component {
         {context => (
           <WebsiteForm
             url={context.url}
-            handleChange={context.handleChange}
+            selector={context.selector}
+            pagination={context.pagination}
+            handleURLChange={context.handleURLChange}
+            handleSelectorChange={context.handleSelectorChange}
+            handlePaginationChange={context.handlePaginationChange}
             handleNext={handleNext}
           />
         )}

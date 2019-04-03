@@ -11,7 +11,6 @@ const {
 } = require('../utils');
 
 let ACCESS_TOKEN = {};
-const hubspotBlogName = 'james-wordpress';
 const blogPostURL = 'https://api.hubapi.com/blogs/v3/blog-posts';
 const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from-url';
 
@@ -59,11 +58,18 @@ module.exports = app => {
         errors: errors.array()
       });
     }
-    const url = req.body.url;
-    const stream = await x(`${url}`, '.post', [{
-      slug: 'a@href',
-      featuredImage: 'img@src',
-    }]).stream();
+    const {
+      url,
+      selector,
+      pagination
+    } = req.body;
+    const stream = await x(`${url}`, `${selector}`, [{
+        slug: 'a@href',
+        featuredImage: 'img@src',
+      }])
+      .paginate(`${pagination}@href`)
+      .limit(10)
+      .stream();
     stream.pipe(res);
   })
 
@@ -84,7 +90,7 @@ module.exports = app => {
         return axios.get(blogPostURL, {
           headers: headers,
           params: {
-            slug: `${hubspotBlogName}${slug}`,
+            slug: slug,
           }
         }).then((response) => {
           const contents = response.data.objects;
@@ -95,7 +101,7 @@ module.exports = app => {
           }))
         })
       }
-      return 'no data for post';
+      res.send('no data for post');
     })
   }
 
