@@ -25,18 +25,18 @@ const styles = {
   }
 };
 
-const Results = ({ imageStatus, confettiActive, classes }) => (
+const Results = ({ uploadDone, classes }) => (
   <div className={classes.root}>
-    <ConfettiComponent confettiActive={confettiActive} />
+    <ConfettiComponent confettiActive={uploadDone} />
     <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>{imageStatus}</CardContent>
+      <CardContent className={classes.cardContent}>{uploadDone}</CardContent>
     </Card>
   </div>
 );
 
 Results.propTypes = {
-  imageStatus: PropTypes.string.isRequired,
-  confettiActive: PropTypes.bool.isRequired,
+  uploadDone: PropTypes.bool.isRequired,
+  // confettiActive: PropTypes.bool.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 

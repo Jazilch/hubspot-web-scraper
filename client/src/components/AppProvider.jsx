@@ -13,8 +13,7 @@ class AppProvider extends Component {
     url: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
-    imageStatus: '',
-    confettiActive: false
+    uploadDone: false
   };
 
   handleChange = evt => {
@@ -83,7 +82,7 @@ class AppProvider extends Component {
     axios.post('/api/v1/updateData', { postData: hubspotPostswImages }).then(
       res =>
         this.setState({
-          imageStatus: res.data
+          uploadDone: res.data
         }),
       error =>
         this.setState({
@@ -91,13 +90,6 @@ class AppProvider extends Component {
           error
         })
     );
-  };
-
-  handleConfetti = () => {
-    const { confettiActive } = this.state;
-    this.setState({
-      confettiActive: !confettiActive
-    });
   };
 
   render() {
@@ -108,7 +100,7 @@ class AppProvider extends Component {
       url,
       hubSpotPosts,
       hubspotPostswImages,
-      imageStatus,
+      uploadDone,
       confettiActive
     } = this.state;
     const { children } = this.props;
@@ -121,7 +113,7 @@ class AppProvider extends Component {
           url,
           hubSpotPosts,
           hubspotPostswImages,
-          imageStatus,
+          uploadDone,
           confettiActive,
           handleChange: this.handleChange,
           handleFetch: this.handleFetch,

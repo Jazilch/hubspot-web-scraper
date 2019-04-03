@@ -191,7 +191,8 @@ module.exports = app => {
         }
       })
     })).then(response => {
-      res.send('all good');
+      res.send(true);
+      res.sendStatus(200);
     })
   })
 
