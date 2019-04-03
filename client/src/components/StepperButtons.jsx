@@ -11,38 +11,44 @@ const styles = {
   }
 };
 
-const StepperButtons = ({ activeStep, handlePrevious, handleNext, classes }) => (
-  <React.Fragment>
-    {activeStep >= 1 && (
-      <React.Fragment>
-        <Button
-          className={classes.button}
-          disabled={activeStep === 0}
-          variant="contained"
-          color="primary"
-          onClick={handlePrevious}
-        >
-          {'Back'}
-        </Button>
-        {activeStep <= 4 && (
+const StepperButtons = ({ data, activeStep, handlePrevious, handleNext, handleReset, classes }) => {
+  const disableButton = !data.length;
+  return (
+    <React.Fragment>
+      {activeStep >= 1 && (
+        <React.Fragment>
           <Button
             className={classes.button}
+            disabled={activeStep === 0}
             variant="contained"
             color="primary"
-            onClick={handleNext}
+            onClick={handlePrevious}
           >
-            {activeStep === 4 ? 'Finish' : 'Next'}
+            {'Back'}
           </Button>
-        )}
-      </React.Fragment>
-    )}
-  </React.Fragment>
-);
+          {activeStep <= 4 && (
+            <Button
+              className={classes.button}
+              variant="contained"
+              disabled={disableButton}
+              color="primary"
+              onClick={activeStep === 4 ? handleReset : handleNext}
+            >
+              {activeStep === 4 ? 'Finish' : 'Next'}
+            </Button>
+          )}
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
+};
 
 StepperButtons.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   activeStep: PropTypes.number.isRequired,
   handlePrevious: PropTypes.func.isRequired,
   handleNext: PropTypes.func.isRequired,
+  handleReset: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 

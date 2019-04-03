@@ -7,16 +7,15 @@ import AppContext from '../components/AppContext';
 
 class UploadImagesContainer extends Component {
   componentDidMount() {
-    const { handleUpload, handleConfetti } = this.props;
+    const { handleUpload } = this.props;
     handleUpload();
-    handleConfetti();
   }
 
   render() {
-    const { imageStatus, confettiActive, error, loading } = this.props;
+    const { uploadDone, confettiActive, error, loading } = this.props;
     return (
       <Results
-        imageStatus={imageStatus}
+        uploadDone={uploadDone}
         confettiActive={confettiActive}
         error={error}
         loading={loading}
@@ -30,8 +29,7 @@ UploadImagesContainer.propTypes = {
   confettiActive: PropTypes.bool.isRequired,
   error: PropTypes.objectOf(PropTypes.string).isRequired,
   loading: PropTypes.bool.isRequired,
-  imageStatus: PropTypes.string.isRequired,
-  handleConfetti: PropTypes.func.isRequired
+  uploadDone: PropTypes.bool.isRequired
 };
 
 export default props => (
@@ -39,12 +37,10 @@ export default props => (
     {context => (
       <UploadImagesContainer
         {...props}
-        imageStatus={context.imageStatus}
-        confettiActive={context.confettiActive}
+        uploadDone={context.uploadDone}
         error={context.error}
         loading={context.loading}
         handleUpload={context.handleUpload}
-        handleConfetti={context.handleConfetti}
       />
     )}
   </AppContext.Consumer>

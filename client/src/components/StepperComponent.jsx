@@ -8,12 +8,12 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepperHelpCard from './StepperHelpCard';
 import Steps from '../Constants';
-import StepperButtons from './StepperButtons';
 import WebsiteFormContainer from '../containers/WebsiteFormContainer';
 import WebsiteDataContainer from '../containers/WebsiteDataContainer';
 import HubSpotPostsContainer from '../containers/HubSpotPostsContainer';
 import HubSpotImagesContainer from '../containers/HubSpotImagesContainer';
 import UploadImagesContainer from '../containers/UploadImagesContainer';
+import StepperButtonsContainer from '../containers/StepperButtonsContainer';
 
 const styles = {
   root: {
@@ -44,6 +44,10 @@ class StepperComponent extends Component {
     });
   };
 
+  handleReset = () => {
+    window.location.reload();
+  };
+
   getStepContent = step => {
     switch (step) {
       case 0:
@@ -57,7 +61,7 @@ class StepperComponent extends Component {
       case 4:
         return <UploadImagesContainer />;
       default:
-        return 'Congrats! You have successfully uploaded your images into HubSpot. Head back to your blog and see your new images';
+        return null;
     }
   };
 
@@ -77,10 +81,11 @@ class StepperComponent extends Component {
         </div>
         <StepperHelpCard activeStep={activeStep} />
         {this.getStepContent(activeStep)}
-        <StepperButtons
+        <StepperButtonsContainer
           activeStep={activeStep}
           handleNext={this.handleNext}
           handlePrevious={this.handlePrevious}
+          handleReset={this.handleReset}
         />
       </React.Fragment>
     );

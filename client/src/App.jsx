@@ -8,11 +8,11 @@ import Application from './containers/Application';
 
 const App = () => (
   <BrowserRouter>
-    <div>
+    <>
       <Header />
       <Route exact path="/" component={Lander} />
       <Route exact path="/home" component={Application} />
-    </div>
+    </>
   </BrowserRouter>
 );
 

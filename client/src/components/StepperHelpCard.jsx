@@ -43,7 +43,7 @@ class StepperHelpCard extends Component {
       case 4:
         return 'Upload complete!🚀🚀 Your posts have been updated';
       default:
-        return 'Hmmmm who are you ';
+        return null;
     }
   };
 

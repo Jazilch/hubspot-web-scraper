@@ -13,7 +13,7 @@ class ErrorComponent extends Component {
       case 500:
         return 'Woah server error';
       default:
-        return 'Idk, it broke ❎';
+        return null;
     }
   };
 
