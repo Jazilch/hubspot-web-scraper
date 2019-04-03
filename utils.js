@@ -1,5 +1,6 @@
 'use es6';
 const normalizeUrl = require('normalize-url');
+const removeLeadingSlash = require('remove-leading-slash');
 const {
   URL
 } = require('url');
@@ -11,6 +12,7 @@ const cleanSlug = (slug) => {
     });
     slug = new URL(slug);
     slug = slug.pathname;
+    slug = removeLeadingSlash(slug);
     return slug;
   }
   return;

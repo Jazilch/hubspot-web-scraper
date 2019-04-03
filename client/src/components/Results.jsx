@@ -36,7 +36,6 @@ const Results = ({ uploadDone, classes }) => (
 
 Results.propTypes = {
   uploadDone: PropTypes.bool.isRequired,
-  // confettiActive: PropTypes.bool.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
