@@ -9,6 +9,7 @@ class AppProvider extends Component {
   state = {
     data: [],
     loading: false,
+    percentLoaded: 0,
     error: null,
     url: '',
     selector: '',
@@ -59,7 +60,14 @@ class AppProvider extends Component {
   handlePosts = () => {
     const { data } = this.state;
     this.setState({ loading: true, error: null });
-    axios.post('/api/v1/posts', { postData: data }).then(
+    const config = {
+      onUploadProgress: progressEvent => {
+        this.setState({
+          percentLoaded: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        });
+      }
+    };
+    axios.post('/api/v1/posts', { postData: data }, config).then(
       res =>
         this.setState({
           hubSpotPosts: res.data,
@@ -110,6 +118,7 @@ class AppProvider extends Component {
     const {
       data,
       loading,
+      percentLoaded,
       error,
       url,
       selector,
@@ -125,6 +134,7 @@ class AppProvider extends Component {
         value={{
           data,
           loading,
+          percentLoaded,
           error,
           url,
           selector,
