@@ -101,7 +101,6 @@ module.exports = app => {
           }))
         })
       }
-      res.send('no data for post');
     })
   }
 
@@ -122,8 +121,10 @@ module.exports = app => {
       if (error.response.status === 401) {
         res.sendStatus(401);
       }
+      res.sendStatus(500)
     }
   })
+
 
   /* ========================= 
   Function takes in an array of objects
