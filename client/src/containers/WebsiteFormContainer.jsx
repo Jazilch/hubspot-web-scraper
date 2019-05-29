@@ -31,10 +31,9 @@ class WebsiteFormContainer extends Component {
           <WebsiteForm
             url={context.url}
             selector={context.selector}
+            blogName={context.blogName}
             pagination={context.pagination}
-            handleURLChange={context.handleURLChange}
-            handleSelectorChange={context.handleSelectorChange}
-            handlePaginationChange={context.handlePaginationChange}
+            handleInputChange={context.handleInputChange}
             handleNext={handleNext}
           />
         )}

@@ -5,7 +5,7 @@ const {
   URL
 } = require('url');
 
-const cleanSlug = (slug) => {
+const createSlug = (slug, blogName) => {
   if (slug) {
     slug = normalizeUrl(slug, {
       removeTrailingSlash: true
@@ -13,9 +13,12 @@ const cleanSlug = (slug) => {
     slug = new URL(slug);
     slug = slug.pathname;
     slug = removeLeadingSlash(slug);
+    if (!slug.includes(blogName)) {
+      return `${blogName}/${slug}`
+    }
     return slug;
   }
   return;
 }
 
-module.exports.cleanSlug = cleanSlug;
+module.exports.createSlug = createSlug;

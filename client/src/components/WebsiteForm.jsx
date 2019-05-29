@@ -15,19 +15,18 @@ const styles = {
 const WebsiteForm = ({
   url,
   selector,
+  blogName,
   pagination,
   classes,
-  handleURLChange,
-  handleSelectorChange,
-  handlePaginationChange,
+  handleInputChange,
   handleNext
 }) => (
   <div>
     <ValidatorForm onSubmit={handleNext}>
       <TextValidator
         label="Website URL"
-        onChange={handleURLChange}
-        name="website"
+        onChange={handleInputChange}
+        name="url"
         type="website"
         validators={['isURL', 'required']}
         errorMessages={['this field is required']}
@@ -40,14 +39,21 @@ const WebsiteForm = ({
         validators={['isEmpty', 'required']}
         errorMessages={['this field is required']}
         value={selector}
-        onChange={handleSelectorChange}
+        onChange={handleInputChange}
+      />
+      <TextValidator
+        label="Blog Name"
+        name="blogName"
+        type="name"
+        value={blogName}
+        onChange={handleInputChange}
       />
       <TextValidator
         label="Pagination"
         name="pagination"
         type="pagination"
         value={pagination}
-        onChange={handlePaginationChange}
+        onChange={handleInputChange}
       />
       <Button className={classes.button} type="submit" variant="contained" color="primary">
         Get Website Data
@@ -59,11 +65,10 @@ const WebsiteForm = ({
 WebsiteForm.propTypes = {
   url: PropTypes.string.isRequired,
   selector: PropTypes.string.isRequired,
+  blogName: PropTypes.string.isRequired,
   pagination: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  handleURLChange: PropTypes.func.isRequired,
-  handleSelectorChange: PropTypes.func.isRequired,
-  handlePaginationChange: PropTypes.func.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
   handleNext: PropTypes.func.isRequired
 };
 
