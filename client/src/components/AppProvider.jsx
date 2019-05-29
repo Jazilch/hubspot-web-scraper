@@ -27,12 +27,12 @@ class AppProvider extends Component {
   };
 
   handleFetch = () => {
-    const { url, selector, blogName, pagination } = this.state;
+    const { url, selector, pagination } = this.state;
     this.setState({
       loading: true,
       error: null
     });
-    axios.post('/api/v1/website', { url, selector, blogName, pagination }).then(
+    axios.post('/api/v1/website', { url, selector, pagination }).then(
       res =>
         this.setState({
           data: res.data,
@@ -47,9 +47,9 @@ class AppProvider extends Component {
   };
 
   handlePosts = () => {
-    const { data } = this.state;
+    const { data, blogName } = this.state;
     this.setState({ loading: true, error: null });
-    axios.post('/api/v1/posts', { postData: data }).then(
+    axios.post('/api/v1/posts', { postData: data, blogName }).then(
       res =>
         this.setState({
           hubSpotPosts: res.data,

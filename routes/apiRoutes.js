@@ -7,7 +7,7 @@ const {
   validationResult
 } = require('express-validator/check');
 const {
-  cleanSlug
+  createSlug
 } = require('../utils');
 
 let ACCESS_TOKEN = {};
@@ -77,7 +77,7 @@ module.exports = app => {
   Function takes in an array of objects
   and returns the return content id from the slug
   ============================ */
-  const getPostsArray = (postData) => {
+  const getPostsArray = (postData, blogName) => {
     const headers = {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
       'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ module.exports = app => {
       let slug = data.slug;
       let featuredImage = data.featuredImage;
       if (slug && featuredImage) {
-        slug = cleanSlug(slug);
+        slug = createSlug(slug, blogName);
         return axios.get(blogPostURL, {
           headers: headers,
           params: {
@@ -112,7 +112,8 @@ module.exports = app => {
   app.post('/api/v1/posts', async (req, res) => {
     try {
       const postData = req.body.postData;
-      const results = await axios.all(getPostsArray(postData))
+      const blogName = req.body.blogName;
+      const results = await axios.all(getPostsArray(postData, blogName))
       if ([].concat(...results).length === 0) {
         res.sendStatus(400);
       }
