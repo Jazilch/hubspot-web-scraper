@@ -12,37 +12,27 @@ class AppProvider extends Component {
     error: null,
     url: '',
     selector: '',
+    blogName: '',
     pagination: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
     uploadDone: false
   };
 
-  handleURLChange = evt => {
+  handleInputChange = evt => {
+    const { name, value } = evt.target;
     this.setState({
-      url: evt.target.value
-    });
-  };
-
-  handleSelectorChange = evt => {
-    this.setState({
-      selector: evt.target.value
-    });
-  };
-
-  handlePaginationChange = evt => {
-    this.setState({
-      pagination: evt.target.value
+      [name]: value
     });
   };
 
   handleFetch = () => {
-    const { url, selector, pagination } = this.state;
+    const { url, selector, blogName, pagination } = this.state;
     this.setState({
       loading: true,
       error: null
     });
-    axios.post('/api/v1/website', { url, selector, pagination }).then(
+    axios.post('/api/v1/website', { url, selector, blogName, pagination }).then(
       res =>
         this.setState({
           data: res.data,
@@ -113,6 +103,7 @@ class AppProvider extends Component {
       error,
       url,
       selector,
+      blogName,
       pagination,
       hubSpotPosts,
       hubspotPostswImages,
@@ -128,14 +119,13 @@ class AppProvider extends Component {
           error,
           url,
           selector,
+          blogName,
           pagination,
           hubSpotPosts,
           hubspotPostswImages,
           uploadDone,
           confettiActive,
-          handleURLChange: this.handleURLChange,
-          handleSelectorChange: this.handleSelectorChange,
-          handlePaginationChange: this.handlePaginationChange,
+          handleInputChange: this.handleInputChange,
           handleFetch: this.handleFetch,
           handlePosts: this.handlePosts,
           handleImages: this.handleImages,
