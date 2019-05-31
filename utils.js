@@ -22,10 +22,11 @@ const createSlug = (slug, blogName) => {
 }
 
 const cleanBackgroundImageURL = (featuredImage, backgroundImage) => {
-  if (featuredImage && backgroundImage === "Yes") {
-    featuredImage = featuredImage.replace('background-image:', '');
-    featuredImage = featuredImage.match(/\((.*?)\)/)[1].replace(/('|")/g, '');
-    return featuredImage;
+  if (featuredImage && backgroundImage === "true") {
+    return featuredImage
+      .replace('background-image:', '')
+      .match(/\((.*?)\)/)[1]
+      .replace(/('|")/g, '');
   }
 }
 

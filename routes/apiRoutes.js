@@ -65,9 +65,10 @@ module.exports = app => {
       backgroundImageSelector,
       backgroundImage
     } = req.body;
+    const imageSelector = `${backgroundImage === "true" ? `${backgroundImageSelector}@style` : 'img@src'}`;
     const stream = await x(`${url}`, `${selector}`, [{
         slug: 'a@href',
-        featuredImage: `${backgroundImage === "Yes" ? `${backgroundImageSelector}@style` : 'img@src'}`,
+        featuredImage: imageSelector,
       }])
       .paginate(`${pagination}@href`)
       .limit(10)

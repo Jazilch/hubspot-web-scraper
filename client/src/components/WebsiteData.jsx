@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorComponent from './ErrorComponent';
 import DataEmptyState from './DataEmptyState';
+import { cleanBackgroundImage } from '../utils/cleanBackgroundImage';
 
 const styles = () => ({
   root: {
@@ -47,14 +48,18 @@ const WebsiteData = ({ data, url, loading, error, classes }) => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map(d => (
-              <TableRow key={d.id}>
-                <TableCell>{d.slug}</TableCell>
-                <TableCell>
-                  <img src={d.featuredImage} height="250" width="250" alt="" />
-                </TableCell>
-              </TableRow>
-            ))}
+            {data.map(d => {
+              const featuredImage = cleanBackgroundImage(d.featuredImage);
+              console.log(featuredImage);
+              return (
+                <TableRow key={d.id}>
+                  <TableCell>{d.slug}</TableCell>
+                  <TableCell>
+                    <img src={featuredImage} height="250" width="250" alt="" />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}
