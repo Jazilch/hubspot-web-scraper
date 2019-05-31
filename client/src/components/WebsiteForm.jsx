@@ -25,6 +25,7 @@ const WebsiteForm = ({
   selector,
   blogName,
   pagination,
+  backgroundImageSelector,
   backgroundImage,
   classes,
   handleInputChange,
@@ -64,6 +65,13 @@ const WebsiteForm = ({
         value={pagination}
         onChange={handleInputChange}
       />
+      <TextValidator
+        label="Background Image Selector"
+        name="backgroundImageSelector"
+        type="backgroundImageSelector"
+        value={backgroundImageSelector}
+        onChange={handleInputChange}
+      />
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="background-image">Background Image</InputLabel>
         <Select
@@ -91,6 +99,7 @@ WebsiteForm.propTypes = {
   selector: PropTypes.string.isRequired,
   blogName: PropTypes.string.isRequired,
   pagination: PropTypes.string.isRequired,
+  backgroundImageSelector: PropTypes.string.isRequired,
   backgroundImage: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleInputChange: PropTypes.func.isRequired,

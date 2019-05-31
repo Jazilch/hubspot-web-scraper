@@ -7,7 +7,7 @@ const {
   validationResult
 } = require('express-validator/check');
 const {
-  createSlug
+  createSlug, cleanBackgroundImageURL
 } = require('../utils');
 
 let ACCESS_TOKEN = {};
@@ -61,11 +61,13 @@ module.exports = app => {
     const {
       url,
       selector,
-      pagination
+      pagination,
+      backgroundImageSelector,
+      backgroundImage
     } = req.body;
     const stream = await x(`${url}`, `${selector}`, [{
         slug: 'a@href',
-        featuredImage: 'img@src',
+        featuredImage: `${backgroundImage === "Yes" ? `${backgroundImageSelector}@style` : 'img@src'}`,
       }])
       .paginate(`${pagination}@href`)
       .limit(10)
@@ -132,7 +134,7 @@ module.exports = app => {
   and returns uploaded file path to HubSpot File Manager.
   Images are uploaded to folder Blog_Media
   ============================ */
-  const getPostImagesArray = (postData) => {
+  const getPostImagesArray = (postData, backgroundImage) => {
     const headers = {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
       'Content-Type': 'application/json'
@@ -140,7 +142,7 @@ module.exports = app => {
     return postData.map((data) => {
       const slug = data.slug;
       const id = data.id;
-      const featuredImage = data.featuredImage;
+      const featuredImage = cleanBackgroundImageURL(data.featuredImage, backgroundImage);
       return axios({
         method: 'post',
         headers: headers,

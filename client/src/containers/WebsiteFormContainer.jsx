@@ -33,6 +33,7 @@ class WebsiteFormContainer extends Component {
             selector={context.selector}
             blogName={context.blogName}
             pagination={context.pagination}
+            backgroundImageSelector={context.backgroundImageSelector}
             backgroundImage={context.backgroundImage}
             handleInputChange={context.handleInputChange}
             handleNext={handleNext}
