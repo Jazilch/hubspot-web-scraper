@@ -14,6 +14,7 @@ class AppProvider extends Component {
     selector: '',
     blogName: '',
     pagination: '',
+    backgroundImage: 'false',
     hubSpotPosts: [],
     hubspotPostswImages: [],
     uploadDone: false
@@ -27,12 +28,12 @@ class AppProvider extends Component {
   };
 
   handleFetch = () => {
-    const { url, selector, pagination } = this.state;
+    const { url, selector, pagination, backgroundImage } = this.state;
     this.setState({
       loading: true,
       error: null
     });
-    axios.post('/api/v1/website', { url, selector, pagination }).then(
+    axios.post('/api/v1/website', { url, selector, pagination, backgroundImage }).then(
       res =>
         this.setState({
           data: res.data,
@@ -105,6 +106,7 @@ class AppProvider extends Component {
       selector,
       blogName,
       pagination,
+      backgroundImage,
       hubSpotPosts,
       hubspotPostswImages,
       uploadDone,
@@ -121,6 +123,7 @@ class AppProvider extends Component {
           selector,
           blogName,
           pagination,
+          backgroundImage,
           hubSpotPosts,
           hubspotPostswImages,
           uploadDone,
