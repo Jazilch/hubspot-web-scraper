@@ -50,7 +50,6 @@ const WebsiteData = ({ data, url, loading, error, classes }) => (
           <TableBody>
             {data.map(d => {
               const featuredImage = cleanBackgroundImage(d.featuredImage);
-              console.log(featuredImage);
               return (
                 <TableRow key={d.id}>
                   <TableCell>{d.slug}</TableCell>
