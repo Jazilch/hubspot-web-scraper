@@ -14,6 +14,8 @@ class AppProvider extends Component {
     selector: '',
     blogName: '',
     pagination: '',
+    backgroundImage: 'false',
+    backgroundImageSelector: '',
     hubSpotPosts: [],
     hubspotPostswImages: [],
     uploadDone: false
@@ -27,23 +29,31 @@ class AppProvider extends Component {
   };
 
   handleFetch = () => {
-    const { url, selector, pagination } = this.state;
+    const { url, selector, pagination, backgroundImageSelector, backgroundImage } = this.state;
     this.setState({
       loading: true,
       error: null
     });
-    axios.post('/api/v1/website', { url, selector, pagination }).then(
-      res =>
-        this.setState({
-          data: res.data,
-          loading: false
-        }),
-      error =>
-        this.setState({
-          loading: false,
-          error
-        })
-    );
+    axios
+      .post('/api/v1/website', {
+        url,
+        selector,
+        pagination,
+        backgroundImageSelector,
+        backgroundImage
+      })
+      .then(
+        res =>
+          this.setState({
+            data: res.data,
+            loading: false
+          }),
+        error =>
+          this.setState({
+            loading: false,
+            error
+          })
+      );
   };
 
   handlePosts = () => {
@@ -64,9 +74,9 @@ class AppProvider extends Component {
   };
 
   handleImages = () => {
-    const { hubSpotPosts } = this.state;
+    const { hubSpotPosts, backgroundImage } = this.state;
     this.setState({ loading: true, error: null });
-    axios.post('/api/v1/images', { postData: hubSpotPosts }).then(
+    axios.post('/api/v1/images', { postData: hubSpotPosts, backgroundImage }).then(
       res =>
         this.setState({
           hubspotPostswImages: res.data,
@@ -105,6 +115,8 @@ class AppProvider extends Component {
       selector,
       blogName,
       pagination,
+      backgroundImageSelector,
+      backgroundImage,
       hubSpotPosts,
       hubspotPostswImages,
       uploadDone,
@@ -121,6 +133,8 @@ class AppProvider extends Component {
           selector,
           blogName,
           pagination,
+          backgroundImageSelector,
+          backgroundImage,
           hubSpotPosts,
           hubspotPostswImages,
           uploadDone,

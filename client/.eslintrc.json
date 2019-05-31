@@ -6,7 +6,8 @@
     "prettier/prettier": ["error"],
     "react/no-multi-comp": ["0", { "ignoreStateless": true }],
     "import/prefer-default-export": "0",
-    "react/require-default-props": "0"
+    "react/require-default-props": "0",
+    "react/jsx-boolean-value": ["always"]
   },
   "env": {
     "browser": true,
