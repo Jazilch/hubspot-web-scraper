@@ -91,7 +91,7 @@ WebsiteForm.propTypes = {
   selector: PropTypes.string.isRequired,
   blogName: PropTypes.string.isRequired,
   pagination: PropTypes.string.isRequired,
-  backgroundImage: PropTypes.bool.isRequired,
+  backgroundImage: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleInputChange: PropTypes.func.isRequired,
   handleNext: PropTypes.func.isRequired
