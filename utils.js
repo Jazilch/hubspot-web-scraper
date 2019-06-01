@@ -21,8 +21,8 @@ const createSlug = (slug, blogName) => {
   return;
 }
 
-const cleanBackgroundImageURL = (featuredImage, backgroundImage) => {
-  if (featuredImage && backgroundImage === "true") {
+const cleanBackgroundImageURL = (featuredImage) => {
+  if (featuredImage) {
     return featuredImage
       .replace('background-image:', '')
       .match(/\((.*?)\)/)[1]

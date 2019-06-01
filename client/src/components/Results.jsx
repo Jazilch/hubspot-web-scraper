@@ -29,7 +29,9 @@ const Results = ({ uploadDone, classes }) => (
   <div className={classes.root}>
     <ConfettiComponent confettiActive={uploadDone} />
     <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>{uploadDone}</CardContent>
+      <CardContent className={classes.cardContent}>
+        {uploadDone ? 'Successfully updated your posts!! 🚀🚀' : 'Updating posts...'}
+      </CardContent>
     </Card>
   </div>
 );
