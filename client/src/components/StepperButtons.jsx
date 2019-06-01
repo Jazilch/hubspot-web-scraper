@@ -11,8 +11,14 @@ const styles = {
   }
 };
 
-const StepperButtons = ({ data, activeStep, handlePrevious, handleNext, handleReset, classes }) => {
-  const disableButton = !data.length;
+const StepperButtons = ({
+  loading,
+  activeStep,
+  handlePrevious,
+  handleNext,
+  handleReset,
+  classes
+}) => {
   return (
     <React.Fragment>
       {activeStep >= 1 && (
@@ -30,7 +36,7 @@ const StepperButtons = ({ data, activeStep, handlePrevious, handleNext, handleRe
             <Button
               className={classes.button}
               variant="contained"
-              disabled={disableButton}
+              disabled={loading}
               color="primary"
               onClick={activeStep === 4 ? handleReset : handleNext}
             >
@@ -44,7 +50,7 @@ const StepperButtons = ({ data, activeStep, handlePrevious, handleNext, handleRe
 };
 
 StepperButtons.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool.isRequired,
   activeStep: PropTypes.number.isRequired,
   handlePrevious: PropTypes.func.isRequired,
   handleNext: PropTypes.func.isRequired,

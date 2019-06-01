@@ -143,7 +143,10 @@ module.exports = app => {
     return postData.map((data) => {
       const slug = data.slug;
       const id = data.id;
-      const featuredImage = cleanBackgroundImageURL(data.featuredImage, backgroundImage);
+      if (backgroundImage === "true") {
+        const featuredImage = cleanBackgroundImageURL(data.featuredImage);
+      }
+      const featuredImage = data.featuredImage;
       return axios({
         method: 'post',
         headers: headers,

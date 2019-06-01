@@ -41,7 +41,7 @@ class StepperHelpCard extends Component {
       case 3:
         return 'Awesome! Images are uploaded into HubSpot';
       case 4:
-        return 'Upload complete!🚀🚀 Your posts have been updated';
+        return 'Updating your HubSpot Posts!!';
       default:
         return null;
     }

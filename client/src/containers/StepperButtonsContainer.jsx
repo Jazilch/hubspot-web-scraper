@@ -8,12 +8,7 @@ import StepperButtons from '../components/StepperButtons';
 const StepperButtonsContainer = props => {
   return (
     <AppContext.Consumer>
-      {context => (
-        <StepperButtons
-          data={context.data || context.hubSpotPosts || context.hubspotPostswImages}
-          {...props}
-        />
-      )}
+      {context => <StepperButtons loading={context.loading} {...props} />}
     </AppContext.Consumer>
   );
 };
