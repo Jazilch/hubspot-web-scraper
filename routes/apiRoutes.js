@@ -1,13 +1,15 @@
 'use strict';
 
 const axios = require('axios');
+const Bottleneck = require('bottleneck/es5');
 const x = require('x-ray-scraper');
 const {
   check,
   validationResult
 } = require('express-validator/check');
 const {
-  createSlug, cleanBackgroundImageURL
+  createSlug,
+  cleanBackgroundImageURL
 } = require('../utils');
 
 let ACCESS_TOKEN = {};
@@ -17,6 +19,11 @@ const fileAPIURL = 'http://api.hubapi.com/filemanager/api/v2/files/download-from
 const {
   getAccessToken
 } = require('./authRoutes');
+
+const limiter = new Bottleneck({
+  minTime: 100
+});
+
 
 const errorMiddleware = fn =>
   (req, res, next) => {
@@ -90,12 +97,12 @@ module.exports = app => {
       let featuredImage = data.featuredImage;
       if (slug && featuredImage) {
         slug = createSlug(slug, blogName);
-        return axios.get(blogPostURL, {
+        return limiter.schedule(() => axios.get(blogPostURL, {
           headers: headers,
           params: {
             slug: slug,
           }
-        }).then((response) => {
+        })).then((response) => {
           const contents = response.data.objects;
           return contents.map(content => ({
             slug: content.slug,
