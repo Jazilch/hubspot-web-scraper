@@ -21,7 +21,7 @@ const {
 } = require('./authRoutes');
 
 const limiter = new Bottleneck({
-  minTime: 100
+  minTime: 200
 });
 
 
@@ -154,7 +154,7 @@ module.exports = app => {
         const featuredImage = cleanBackgroundImageURL(data.featuredImage);
       }
       const featuredImage = data.featuredImage;
-      return axios({
+      return limiter.schedule(() => axios({
         method: 'post',
         headers: headers,
         url: `${fileAPIURL}`,
@@ -162,7 +162,7 @@ module.exports = app => {
           folder_path: "Blog_Media",
           "url": featuredImage
         }
-      }).then(response => ({
+      })).then(response => ({
         slug,
         id,
         featuredImage: response.data.url,
@@ -196,7 +196,7 @@ module.exports = app => {
       let id = data.id;
       let featuredImage = data.featuredImage;
       const putUrl = `https://api.hubapi.com/content/api/v2/blog-posts/${id}`;
-      return axios({
+      return limiter.schedule(() => axios({
         method: 'put',
         headers: headers,
         url: putUrl,
@@ -204,7 +204,7 @@ module.exports = app => {
           use_featured_image: true,
           featured_image: featuredImage
         }
-      }).then(response => {
+      })).then(response => {
         if (response.status === 200) {
           return;
         } else {
