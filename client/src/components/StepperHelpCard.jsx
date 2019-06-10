@@ -39,7 +39,7 @@ class StepperHelpCard extends Component {
       case 2:
         return 'Now that we have the posts data we can see which posts are in HubSpot. Once you have reviewed the posts click next and this will upload your images into the HubSpot File Manager';
       case 3:
-        return 'Awesome! Images are uploaded into HubSpot';
+        return 'Awesome! Images are uploading into HubSpot';
       case 4:
         return 'Updating your HubSpot Posts!!';
       default:

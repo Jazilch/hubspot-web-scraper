@@ -94,23 +94,24 @@ module.exports = app => {
     };
     return postData.map((data) => {
       let slug = data.slug;
-      let featuredImage = data.featuredImage;
-      if (slug && featuredImage) {
-        slug = createSlug(slug, blogName);
-        return limiter.schedule(() => axios.get(blogPostURL, {
-          headers: headers,
-          params: {
-            slug: slug,
-          }
-        })).then((response) => {
-          const contents = response.data.objects;
-          return contents.map(content => ({
-            slug: content.slug,
-            id: content.id,
-            featuredImage,
-          }))
-        })
+      let featuredImage = data.featuredImage || null;
+      if (!slug) {
+        return;
       }
+      slug = createSlug(slug, blogName);
+      return limiter.schedule(() => axios.get(blogPostURL, {
+        headers: headers,
+        params: {
+          slug: slug,
+        }
+      })).then((response) => {
+        const contents = response.data.objects;
+        return contents.map(content => ({
+          slug: content.slug,
+          id: content.id,
+          featuredImage,
+        }))
+      })
     })
   }
 
@@ -153,6 +154,13 @@ module.exports = app => {
       if (backgroundImage === "true") {
         const featuredImage = cleanBackgroundImageURL(data.featuredImage);
       }
+      if (!data.featuredImage) {
+        return {
+          slug,
+          id,
+          featuredImage: null
+        }
+      }
       const featuredImage = data.featuredImage;
       return limiter.schedule(() => axios({
         method: 'post',
@@ -181,7 +189,7 @@ module.exports = app => {
       const results = await axios.all(getPostImagesArray(postData))
       res.send([].concat(...results))
     } catch (error) {
-      console.log(error);
+      res.send(500);
     }
   })
 
@@ -195,6 +203,9 @@ module.exports = app => {
     return axios.all(postData.map(data => {
       let id = data.id;
       let featuredImage = data.featuredImage;
+      if (!featuredImage) {
+        return;
+      }
       const putUrl = `https://api.hubapi.com/content/api/v2/blog-posts/${id}`;
       return limiter.schedule(() => axios({
         method: 'put',
