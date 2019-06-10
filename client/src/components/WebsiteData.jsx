@@ -49,12 +49,20 @@ const WebsiteData = ({ data, url, loading, error, classes }) => (
           </TableHead>
           <TableBody>
             {data.map(d => {
-              const featuredImage = cleanBackgroundImage(d.featuredImage);
               return (
                 <TableRow key={d.id}>
                   <TableCell>{d.slug}</TableCell>
                   <TableCell>
-                    <img src={featuredImage} height="250" width="250" alt="" />
+                    {d.featuredImage ? (
+                      <img
+                        src={cleanBackgroundImage(d.featuredImage)}
+                        height="250"
+                        width="250"
+                        alt=""
+                      />
+                    ) : (
+                      'No featured image found'
+                    )}
                   </TableCell>
                 </TableRow>
               );
